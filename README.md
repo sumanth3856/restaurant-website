@@ -1,4 +1,8 @@
+# Maison Delish - Culinary Excellence 🥂
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+**Last Updated**: 2025-12-11
 
 ## Getting Started
 
