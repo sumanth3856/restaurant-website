@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  /* Modern Clean Professional Theme */
+  --background: #ffffff;
+  --foreground: #1e293b;
+  /* Slate 800 */
+
+  --primary: #0f172a;
+  /* Slate 900 - Strong, bold, authoritative */
+  --primary-foreground: #f8fafc;
+  /* Slate 50 */
+
+  --secondary: #f1f5f9;
+  /* Slate 100 - Gentle secondary backgrounds */
+  --secondary-foreground: #0f172a;
+
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  /* Slate 500 */
+
+  --accent: #d97706;
+  /* Amber 600 - Warmth for a 'Delish' feel */
+  --accent-foreground: #ffffff;
+
+  --border: #e2e8f0;
+  /* Slate 200 */
+  --input: #e2e8f0;
+  --ring: #0f172a;
+
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #020617;
+    /* Slate 950 */
+    --foreground: #f8fafc;
+    /* Slate 50 */
+
+    --primary: #f8fafc;
+    --primary-foreground: #020617;
+
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+
+    --muted: #0f172a;
+    --muted-foreground: #94a3b8;
+
+    --accent: #fbbf24;
+    /* Amber 400 */
+    --accent-foreground: #020617;
+
+    --border: #1e293b;
+    --input: #1e293b;
+    --ring: #e2e8f0;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+}
