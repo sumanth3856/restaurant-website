@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: '/admin/',
         },
-        sitemap: 'https://maisondelish.com/sitemap.xml',
+        sitemap: 'https://maisondelish.vercel.app/sitemap.xml',
     };
 }
