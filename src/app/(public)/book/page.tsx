@@ -1,4 +1,12 @@
-import { BookingForm } from "@/components/features/BookingForm";
+import dynamic from 'next/dynamic';
+import { Loader } from 'lucide-react';
+
+const BookingForm = dynamic(
+    () => import("@/components/features/BookingForm").then((mod) => mod.BookingForm),
+    {
+        loading: () => <div className="flex justify-center p-12"><Loader className="animate-spin w-8 h-8 text-primary" /></div>
+    }
+);
 
 export default async function BookPage() {
     await new Promise((resolve) => setTimeout(resolve, 100));

@@ -15,6 +15,7 @@ const bodoni = Bodoni_Moda({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://maisondelish.vercel.app'),
   title: {
     default: "Maison Delish | Culinary Excellence",
     template: "%s | Maison Delish"
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://maisondelish.com',
+    url: 'https://maisondelish.vercel.app',
     siteName: 'Maison Delish',
     title: 'Maison Delish',
     description: 'Experience the finest cuisine in a modern atmosphere.',

@@ -6,7 +6,13 @@ import { useParams } from "next/navigation";
 import { ArrowLeft, Loader } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { MenuForm, MenuFormData } from "@/components/admin/MenuForm";
+import dynamic from 'next/dynamic';
+
+const MenuForm = dynamic(
+    () => import("@/components/admin/MenuForm").then((mod) => mod.MenuForm),
+    { loading: () => <div className="flex justify-center p-12"><Loader className="animate-spin w-8 h-8 text-primary" /></div> }
+);
+import { MenuFormData } from "@/components/admin/MenuForm";
 
 interface MenuItem extends MenuFormData {
     id: string;

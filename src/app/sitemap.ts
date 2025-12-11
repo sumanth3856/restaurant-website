@@ -3,37 +3,37 @@ import { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
     return [
         {
-            url: 'https://maisondelish.com',
+            url: 'https://maisondelish.vercel.app',
             lastModified: new Date(),
             changeFrequency: 'yearly',
             priority: 1,
         },
         {
-            url: 'https://maisondelish.com/menu',
+            url: 'https://maisondelish.vercel.app/menu',
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.8,
         },
         {
-            url: 'https://maisondelish.com/book',
+            url: 'https://maisondelish.vercel.app/book',
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.8,
         },
         {
-            url: 'https://maisondelish.com/gallery',
+            url: 'https://maisondelish.vercel.app/gallery',
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.8,
         },
         {
-            url: 'https://maisondelish.com/contact',
+            url: 'https://maisondelish.vercel.app/contact',
             lastModified: new Date(),
             changeFrequency: 'yearly',
             priority: 0.5,
         },
         {
-            url: 'https://maisondelish.com/login',
+            url: 'https://maisondelish.vercel.app/login',
             lastModified: new Date(),
             changeFrequency: 'yearly',
             priority: 0.3,
