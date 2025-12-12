@@ -22,7 +22,7 @@ const menuSchema = z.object({
 type MenuFormValues = z.infer<typeof menuSchema>;
 
 interface MenuFormProps {
-    initialData?: MenuFormValues & { id?: string };
+    initialData?: MenuFormValues & { id?: number };
 }
 
 const CATEGORIES = ["Starters", "Mains", "Desserts", "Drinks"];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { MenuItem, Category } from "@/types/menu";
 import { MenuItemCard } from "@/components/features/MenuItemCard";
 import { cn } from "@/lib/utils";
@@ -39,11 +40,25 @@ export function MenuInterface({ initialItems }: MenuInterfaceProps) {
             </div>
 
             {/* Menu Grid */}
-            <div className="grid lg:grid-cols-2 gap-x-12 gap-y-8 max-w-6xl mx-auto">
-                {filteredItems.map((item) => (
-                    <MenuItemCard key={item.id} item={item} />
-                ))}
-            </div>
+            <motion.div
+                layout
+                className="grid lg:grid-cols-2 gap-x-12 gap-y-8 max-w-6xl mx-auto"
+            >
+                <AnimatePresence mode="popLayout">
+                    {filteredItems.map((item) => (
+                        <motion.div
+                            key={item.id}
+                            layout
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <MenuItemCard item={item} />
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </motion.div>
 
             {filteredItems.length === 0 && (
                 <div className="text-center py-20 text-muted-foreground">

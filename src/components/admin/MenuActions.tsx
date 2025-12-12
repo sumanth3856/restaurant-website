@@ -5,6 +5,7 @@ import { Edit, Trash2, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { toast } from "sonner";
 import { deleteMenuItem } from "@/app/actions/menuActions";
 
 interface MenuActionsProps {
@@ -22,11 +23,12 @@ export function MenuActions({ id, imageUrl }: MenuActionsProps) {
 
         setIsDeleting(true);
         try {
-            await deleteMenuItem(id, imageUrl);
+            await deleteMenuItem(parseInt(id), imageUrl);
+            toast.success("Item deleted successfully");
             // router.refresh() handled by revalidatePath, but useful for client-side feedback if needed immediately
         } catch (error) {
             console.error("Delete failed:", error);
-            alert("Failed to delete item.");
+            toast.error("Failed to delete item.");
         } finally {
             setIsDeleting(false);
         }
