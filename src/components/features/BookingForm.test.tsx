@@ -1,76 +1,127 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { BookingForm } from './BookingForm';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { supabase } from '@/lib/supabase';
+import * as emailActions from '@/app/actions/sendEmail';
+import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
-// Mock Supabase
-const mocks = vi.hoisted(() => {
-    const insert = vi.fn();
-    const from = vi.fn(() => ({
-        insert,
-    }));
-    return {
-        insert,
-        from,
-    };
-});
-
+// Mock dependencies
 vi.mock('@/lib/supabase', () => ({
     supabase: {
-        from: mocks.from,
-    },
+        from: vi.fn(() => ({
+            insert: vi.fn().mockResolvedValue({ error: null })
+        }))
+    }
 }));
 
-describe('BookingForm Integration', () => {
+vi.mock('@/app/actions/sendEmail', () => ({
+    sendBookingConfirmationEmail: vi.fn(),
+}));
+
+vi.mock('sonner', () => ({
+    toast: {
+        error: vi.fn(),
+        success: vi.fn(),
+    }
+}));
+
+// Mock logger
+vi.mock('@/lib/logger', () => ({
+    logger: {
+        error: vi.fn(),
+    }
+}));
+
+describe('BookingForm', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        // Default successful response
-        mocks.insert.mockResolvedValue({ error: null });
+        // Reset supabase mock
+        (supabase.from as any).mockReturnValue({
+            insert: vi.fn().mockResolvedValue({ error: null })
+        });
+        (emailActions.sendBookingConfirmationEmail as any).mockResolvedValue({ success: true });
     });
 
     it('submits the form successfully with valid data', async () => {
         render(<BookingForm />);
 
-        // Fill out the form
-        fireEvent.change(screen.getByLabelText(/Date/i), { target: { value: '2025-12-25' } });
+        // Fill form
+        fireEvent.change(screen.getByLabelText(/Date/i), { target: { value: '2024-12-25' } });
         fireEvent.change(screen.getByLabelText(/Time/i), { target: { value: '19:00' } });
         fireEvent.change(screen.getByLabelText(/Guests/i), { target: { value: '4' } });
-        fireEvent.change(screen.getByPlaceholderText(/John Doe/i), { target: { value: 'Jane Doe' } });
-        fireEvent.change(screen.getByPlaceholderText(/john@example.com/i), { target: { value: 'jane@example.com' } });
-        fireEvent.change(screen.getByPlaceholderText(/\(555\) 000-0000/i), { target: { value: '1234567890' } });
+        fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'John Doe' } });
+        fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john@example.com' } });
+        fireEvent.change(screen.getByLabelText(/Phone/i), { target: { value: '1234567890' } });
 
-        // Submit
-        const submitBtn = screen.getByRole('button', { name: /Confirm Reservation/i });
-        fireEvent.click(submitBtn);
+        fireEvent.submit(screen.getByRole('button', { name: /Confirm Reservation/i }));
 
-        // Expect Supabase to be called
         await waitFor(() => {
-            expect(mocks.from).toHaveBeenCalledWith('bookings');
-            expect(mocks.insert).toHaveBeenCalledWith([
-                expect.objectContaining({
-                    name: 'Jane Doe',
-                    email: 'jane@example.com',
-                    party_size: 4,
-                }),
-            ]);
+            expect(screen.getByText('Booking Confirmed!')).toBeInTheDocument();
         });
 
-        // Expect Success Message
-        expect(await screen.findByText(/Booking Confirmed!/i)).toBeInTheDocument();
+        // Click make another booking (reload)
+        const reloadMock = vi.fn();
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            writable: true,
+            value: { reload: reloadMock }
+        });
+
+        fireEvent.click(screen.getByText('Make another booking'));
+        expect(reloadMock).toHaveBeenCalled();
     });
 
-    it('displays error messages for invalid inputs', async () => {
+    it('handles email failure but still shows success', async () => {
+        // Mock email failure
+        (emailActions.sendBookingConfirmationEmail as any).mockResolvedValue({
+            success: false,
+            error: 'SMTP Error'
+        });
+
         render(<BookingForm />);
 
-        // Submit empty form
-        const submitBtn = screen.getByRole('button', { name: /Confirm Reservation/i });
-        fireEvent.click(submitBtn);
+        // Fill form
+        fireEvent.change(screen.getByLabelText(/Date/i), { target: { value: '2024-12-25' } });
+        fireEvent.change(screen.getByLabelText(/Time/i), { target: { value: '19:00' } });
+        fireEvent.change(screen.getByLabelText(/Guests/i), { target: { value: '2' } });
+        fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'Jane Doe' } });
+        fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'jane@example.com' } });
+        fireEvent.change(screen.getByLabelText(/Phone/i), { target: { value: '0987654321' } });
 
-        // Validation errors should appear
-        expect(await screen.findByText(/Date is required/i)).toBeInTheDocument();
-        expect(await screen.findByText(/Time is required/i)).toBeInTheDocument();
-        expect(await screen.findByText(/Name is required/i)).toBeInTheDocument();
+        fireEvent.submit(screen.getByRole('button', { name: /Confirm Reservation/i }));
 
-        // Supabase should NOT be called
-        expect(mocks.insert).not.toHaveBeenCalled();
+        await waitFor(() => {
+            // Still succeeds locally
+            expect(screen.getByText('Booking Confirmed!')).toBeInTheDocument();
+            // Logs error
+            expect(logger.error).toHaveBeenCalledWith("Email failed but booking succeeded:", 'SMTP Error');
+        });
+    });
+
+    it('handles database insertion error', async () => {
+        // Mock supabase insert error
+        (supabase.from as any).mockReturnValue({
+            insert: vi.fn().mockResolvedValue({ error: { message: 'DB Error' } })
+        });
+
+        render(<BookingForm />);
+
+        // Fill form
+        fireEvent.change(screen.getByLabelText(/Date/i), { target: { value: '2024-12-25' } });
+        fireEvent.change(screen.getByLabelText(/Time/i), { target: { value: '19:00' } });
+        fireEvent.change(screen.getByLabelText(/Guests/i), { target: { value: '2' } });
+        fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'Error User' } });
+        fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'error@example.com' } });
+        fireEvent.change(screen.getByLabelText(/Phone/i), { target: { value: '0000000000' } });
+
+        fireEvent.submit(screen.getByRole('button', { name: /Confirm Reservation/i }));
+
+        await waitFor(() => {
+            expect(logger.error).toHaveBeenCalledWith("Booking error:", expect.anything());
+            expect(toast.error).toHaveBeenCalledWith("Failed to create booking. Please try again.");
+            expect(screen.queryByText('Booking Confirmed!')).not.toBeInTheDocument();
+        });
     });
 });

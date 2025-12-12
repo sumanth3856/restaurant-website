@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
 
+import { logger } from "@/lib/logger";
+
 export default function Error({
     error,
     reset,
@@ -12,7 +14,7 @@ export default function Error({
 }) {
     useEffect(() => {
         // Log exception to an error reporting service (e.g. Sentry)
-        console.error(error);
+        logger.error(error);
     }, [error]);
 
     return (

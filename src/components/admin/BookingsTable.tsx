@@ -42,7 +42,7 @@ export default function BookingsTable({ initialBookings }: BookingsTableProps) {
                 b.id === id ? { ...b, status: newStatus } : b
             ));
 
-            await updateBookingStatus(id, newStatus);
+            await updateBookingStatus(parseInt(id), newStatus);
 
             // router.refresh() is handled by the server action's revalidatePath implicitly for other routes,
             // but we might still want it here to be safe or just rely on the setBookings for immediate feedback.

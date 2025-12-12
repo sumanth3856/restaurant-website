@@ -10,7 +10,7 @@ afterEach(() => {
 // Mock Next.js Image
 vi.mock('next/image', () => ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    default: ({ src, alt, ...props }: any) => (
+    default: ({ src, alt, fill, unoptimized, ...props }: any) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt={alt} {...props} />
     ),
