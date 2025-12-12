@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, CalendarDays, UtensilsCrossed, Settings, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, CalendarDays, UtensilsCrossed, Settings, LogOut, Menu, X, MessageSquare } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -40,6 +40,7 @@ export default function AdminLayout({
         { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
         { href: "/admin/bookings", label: "Bookings", icon: CalendarDays },
         { href: "/admin/menu", label: "Menu Manager", icon: UtensilsCrossed },
+        { href: "/admin/reviews", label: "Reviews", icon: MessageSquare },
         { href: "/admin/settings", label: "Settings", icon: Settings },
     ];
 

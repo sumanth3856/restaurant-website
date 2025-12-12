@@ -7,7 +7,12 @@ import { bookingSchema, BookingFormData } from "@/lib/validations";
 import { Calendar, Users, Clock, CheckCircle, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
-import { Loader } from "@/components/ui/Loader";
+import { Loader } from "lucide-react";
+import { toast } from "sonner";
+
+import { sendBookingConfirmationEmail } from "@/app/actions/sendEmail";
+
+import { logger } from "@/lib/logger";
 
 // Helper for required label
 const RequiredLabel = ({ label, icon: Icon, htmlFor }: { label: string, icon: any, htmlFor?: string }) => (
@@ -56,10 +61,24 @@ export function BookingForm() {
 
             if (error) throw error;
 
+            // Send confirmation email
+            const emailResult = await sendBookingConfirmationEmail({
+                name: data.name,
+                email: data.email,
+                date: data.date,
+                time: data.time,
+                guests: data.partySize,
+            });
+
+            if (!emailResult.success) {
+                logger.error("Email failed but booking succeeded:", emailResult.error);
+                // Still show success to user since booking was created
+            }
+
             setIsSuccess(true);
         } catch (err) {
-            console.error("Booking error:", err);
-            alert("Failed to create booking. Please try again.");
+            logger.error("Booking error:", err);
+            toast.error("Failed to create booking. Please try again.");
         } finally {
             setIsSubmitting(false);
         }
@@ -96,12 +115,12 @@ export function BookingForm() {
                         type="date"
                         className={cn(
                             "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
-                            errors.date && "border-red-500"
+                            errors.date && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         min={new Date().toISOString().split('T')[0]}
                         {...register("date")}
                     />
-                    {errors.date && <p className="text-xs text-red-500 font-medium ml-1">{errors.date.message}</p>}
+                    {errors.date && <p className="text-xs text-red-500 font-medium ml-1 animate-in slide-in-from-left-1">{errors.date.message}</p>}
                 </div>
 
                 {/* Time */}
@@ -111,7 +130,7 @@ export function BookingForm() {
                         id="time"
                         className={cn(
                             "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all appearance-none shadow-sm",
-                            errors.time && "border-red-500"
+                            errors.time && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("time")}
                     >
@@ -126,7 +145,7 @@ export function BookingForm() {
                         <option value="20:30">8:30 PM</option>
                         <option value="21:00">9:00 PM</option>
                     </select>
-                    {errors.time && <p className="text-xs text-red-500 font-medium ml-1">{errors.time.message}</p>}
+                    {errors.time && <p className="text-xs text-red-500 font-medium ml-1 animate-in slide-in-from-left-1">{errors.time.message}</p>}
                 </div>
 
                 {/* Party Size */}
@@ -137,11 +156,11 @@ export function BookingForm() {
                         type="number"
                         className={cn(
                             "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
-                            errors.partySize && "border-red-500"
+                            errors.partySize && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("partySize")}
                     />
-                    {errors.partySize && <p className="text-xs text-red-500 font-medium ml-1">{errors.partySize.message}</p>}
+                    {errors.partySize && <p className="text-xs text-red-500 font-medium ml-1 animate-in slide-in-from-left-1">{errors.partySize.message}</p>}
                 </div>
             </div>
 
@@ -162,14 +181,15 @@ export function BookingForm() {
                     <input
                         id="name"
                         type="text"
+                        autoComplete="name"
                         placeholder="John Doe"
                         className={cn(
                             "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
-                            errors.name && "border-red-500"
+                            errors.name && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("name")}
                     />
-                    {errors.name && <p className="text-xs text-red-500 font-medium ml-1">{errors.name.message}</p>}
+                    {errors.name && <p className="text-xs text-red-500 font-medium ml-1 animate-in slide-in-from-left-1">{errors.name.message}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -180,14 +200,15 @@ export function BookingForm() {
                     <input
                         id="email"
                         type="email"
+                        autoComplete="email"
                         placeholder="john@example.com"
                         className={cn(
                             "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
-                            errors.email && "border-red-500"
+                            errors.email && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("email")}
                     />
-                    {errors.email && <p className="text-xs text-red-500 font-medium ml-1">{errors.email.message}</p>}
+                    {errors.email && <p className="text-xs text-red-500 font-medium ml-1 animate-in slide-in-from-left-1">{errors.email.message}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
@@ -198,14 +219,15 @@ export function BookingForm() {
                     <input
                         id="phone"
                         type="tel"
+                        autoComplete="tel"
                         placeholder="(555) 000-0000"
                         className={cn(
                             "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
-                            errors.phone && "border-red-500"
+                            errors.phone && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("phone")}
                     />
-                    {errors.phone && <p className="text-xs text-red-500 font-medium ml-1">{errors.phone.message}</p>}
+                    {errors.phone && <p className="text-xs text-red-500 font-medium ml-1 animate-in slide-in-from-left-1">{errors.phone.message}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
@@ -221,9 +243,14 @@ export function BookingForm() {
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 text-primary-foreground font-bold text-lg rounded-full bg-primary hover:bg-primary/90 transition-all shadow-lg active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full py-4 text-primary-foreground font-bold text-lg rounded-full bg-primary hover:bg-primary/90 transition-all shadow-lg active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-                {isSubmitting ? <Loader className="text-primary-foreground w-5 h-5" /> : "Confirm Reservation"}
+                {isSubmitting ? (
+                    <>
+                        <Loader className="w-5 h-5 animate-spin" />
+                        Processing...
+                    </>
+                ) : "Confirm Reservation"}
             </button>
         </form>
     );

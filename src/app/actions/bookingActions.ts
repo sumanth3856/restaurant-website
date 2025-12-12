@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function updateBookingStatus(id: string, status: 'pending' | 'confirmed' | 'cancelled') {
+export async function updateBookingStatus(id: number, status: 'pending' | 'confirmed' | 'cancelled') {
     const supabase = await createClient();
 
     const { error } = await supabase

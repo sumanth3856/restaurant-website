@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function upsertMenuItem(data: any, id?: string) {
+export async function upsertMenuItem(data: any, id?: number) {
     const supabase = await createClient();
 
     let error;
@@ -34,7 +34,7 @@ export async function upsertMenuItem(data: any, id?: string) {
     revalidatePath('/'); // For landing page featured items
 }
 
-export async function deleteMenuItem(id: string, imageUrl?: string) {
+export async function deleteMenuItem(id: number, imageUrl?: string) {
     const supabase = await createClient();
 
     // 1. Delete Image if exists
