@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Lato } from "next/font/google"; // Ultra-premium editorial fonts
+import { Manrope } from "next/font/google"; // Modern, clean font
 import "./globals.css";
 
-const lato = Lato({
+const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-sans",
-  weight: ["300", "400", "700"],
-});
-
-const bodoni = Bodoni_Moda({
-  subsets: ["latin"],
-  variable: "--font-serif",
-  weight: ["400", "500", "600", "700", "800"], // High contrast weights
 });
 
 export const metadata: Metadata = {
@@ -56,10 +49,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${lato.variable} ${bodoni.variable} antialiased font-sans bg-background text-foreground flex flex-col min-h-screen`}
+        className={`${manrope.variable} antialiased font-sans bg-background text-foreground flex flex-col min-h-screen`}
       >
         {children}
       </body>

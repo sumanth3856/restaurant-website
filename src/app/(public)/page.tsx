@@ -1,104 +1,94 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Star, ChefHat, Clock } from "lucide-react";
 import { SectionDivider } from "@/components/ui/SectionDivider";
+import FeaturedItemsSection from "@/components/features/FeaturedItemsSection";
 
 export default async function Home() {
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  console.log("--- RENDERING HOME PAGE (3D Version) ---");
+  await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate loading for animations
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="bg-noise" />
-
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Hero Section */}
-      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Background Image with Overlay */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+        {/* Cinematic Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop"
-            alt="Delicious Food Spread"
+            src="https://images.unsplash.com/photo-1514362545857-3bc16549766b?q=80&w=1920&auto=format&fit=crop"
+            alt="Maison Delish High-End Dining"
             fill
-            className="object-cover"
+            className="object-cover scale-105 animate-slow-zoom"
             priority
             sizes="100vw"
+            quality={90}
           />
-          {/* Gradient Overlay for Premium Depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 backdrop-blur-[1px]" />
+          {/* Multi-layered Gradient for Depth */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30" />
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" />
         </div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto space-y-8 animate-in fade-in zoom-in duration-1000">
-          <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 text-white text-xs font-medium tracking-[0.2em] uppercase border border-white/20 backdrop-blur-md mb-4 shadow-lg ring-1 ring-white/10">
-            Est. 2024 • Maison Delish
-          </span>
-          <h1 className="text-6xl md:text-8xl font-serif font-bold text-white tracking-tight leading-[1.1] drop-shadow-2xl">
-            Taste the <span className="text-accent italic">Extraordinary</span>
-          </h1>
-          <p className="text-lg md:text-2xl text-white/90 font-light max-w-2xl mx-auto leading-relaxed drop-shadow-lg text-balance opacity-90">
-            Where culinary artistry meets timeless elegance. Experience a symphony of flavors crafted with passion.
-          </p>
+        {/* Content Container */}
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center space-y-8 p-8 md:p-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
-            <Link
-              href="/book"
-              className="group relative px-8 py-4 bg-accent hover:bg-accent/90 text-white rounded-full font-semibold text-lg transition-all shadow-[0_0_20px_rgba(217,119,6,0.3)] hover:shadow-[0_0_30px_rgba(217,119,6,0.5)] flex items-center gap-2"
-            >
-              Book a Table
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="/menu"
-              className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white rounded-full font-semibold text-lg backdrop-blur-sm border border-white/20 transition-all flex items-center"
-            >
-              View Menu
-            </Link>
+            {/* Top Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 border border-accent/30 backdrop-blur-md text-accent-foreground mb-4 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+              <Star className="w-4 h-4 text-accent fill-accent animate-pulse" />
+              <span className="text-xs md:text-sm font-semibold tracking-wider uppercase text-accent">Michelin Guide Recommended 2024</span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white tracking-tight leading-[1.1] drop-shadow-2xl">
+              Elevate Your <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/70 italic">
+                Senses
+              </span>
+            </h1>
+
+            {/* Subheadline */}
+            <p className="text-lg md:text-2xl text-zinc-300 font-light max-w-2xl mx-auto leading-relaxed drop-shadow-md">
+              Experience the symphony of flavors where culinary artistry meets
+              <span className="text-white font-medium"> timeless elegance</span>.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-8">
+              <Link
+                href="/book"
+                className="group relative px-8 py-4 bg-accent hover:bg-accent/90 text-white rounded-full font-semibold text-lg transition-all 
+                shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:-translate-y-1 overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  Reserve a Table
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+              </Link>
+
+              <Link
+                href="/menu"
+                className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-full font-semibold text-lg backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all flex items-center gap-2 hover:-translate-y-1"
+              >
+                <ChefHat className="w-5 h-5" />
+                Explore Menu
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-white/70">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1">
-            <div className="w-1 h-2 bg-white/70 rounded-full" />
-          </div>
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce text-white/50 z-20">
+          <span className="text-[10px] uppercase tracking-[0.2em]">Scroll</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
         </div>
       </section>
 
       <SectionDivider />
 
-      {/* Intro / Features Teaser */}
-      <section className="py-24 bg-secondary/30">
-        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center">
-          <div className="space-y-6">
-            <h2 className="text-4xl font-serif font-bold text-primary">
-              Crafted with Passion,<br />Served with Love.
-            </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed">
-              At Maison Delish, we believe that food is more than just sustenance—it&apos;s an experience. Our chefs meticulously select the finest local ingredients to create dishes that tell a story.
-            </p>
-            <ul className="space-y-4 pt-4">
-              {[
-                "Locally sourced, organic ingredients",
-                "Award-winning wine selection",
-                "Intimate, modern atmosphere",
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-foreground/80">
-                  <span className="w-2 h-2 rounded-full bg-accent" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl skew-y-1">
-            <Image
-              src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2069&auto=format&fit=crop"
-              alt="Chef plating food"
-              fill
-              className="object-cover hover:scale-105 transition-transform duration-700"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </div>
-        </div>
-      </section>
+      <FeaturedItemsSection />
+
     </div>
   );
 }

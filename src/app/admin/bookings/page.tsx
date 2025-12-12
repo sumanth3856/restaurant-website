@@ -1,88 +1,33 @@
-import { supabase } from "@/lib/supabase";
-import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
+import BookingsTable from "@/components/admin/BookingsTable";
 
-export const revalidate = 0; // Disable cache for admin
+export const metadata = {
+    title: "Bookings | Admin",
+};
 
-interface Booking {
-    id: string;
-    name: string;
-    date: string;
-    time: string;
-    party_size: number;
-    email: string;
-    status: string;
-}
+export default async function BookingsPage() {
+    const supabase = await createClient();
 
-export default async function AdminBookings() {
-    const { data: bookings, error } = await supabase
+    const { data: bookings } = await supabase
         .from('bookings')
         .select('*')
-        .order('date', { ascending: true })
+        .order('date', { ascending: false })
         .order('time', { ascending: true });
 
-    if (error) console.error("Error fetching bookings:", error);
-
-    const items = (bookings || []) as Booking[];
-
     return (
-        <div className="space-y-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="text-center md:text-left">
-                    <h1 className="text-3xl font-serif font-bold text-primary">Reservations</h1>
-                    <p className="text-muted-foreground">Manage upcoming table bookings.</p>
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-serif font-bold text-foreground">Reservations</h1>
+                    <p className="text-muted-foreground mt-1">Manage table bookings and requests.</p>
                 </div>
-                <Link href="/admin/bookings/add" className="px-4 py-2 bg-accent text-black font-bold rounded-lg hover:bg-accent/90 transition-colors shadow-sm">
-                    Add Reservation
-                </Link>
+                <div className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-bold">
+                    {bookings?.length || 0} Total Bookings
+                </div>
             </div>
 
-            <div className="bg-card rounded-xl border border-border overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm">
-                        <thead className="bg-secondary/50 text-muted-foreground border-b border-border">
-                            <tr>
-                                <th className="p-4 font-medium">Guest</th>
-                                <th className="p-4 font-medium">Date & Time</th>
-                                <th className="p-4 font-medium">Party Size</th>
-                                <th className="p-4 font-medium">Contact</th>
-                                <th className="p-4 font-medium">Status</th>
-                                <th className="p-4 font-medium">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
-                            {items.length === 0 ? (
-                                <tr>
-                                    <td colSpan={6} className="p-8 text-center text-muted-foreground">
-                                        No bookings found.
-                                    </td>
-                                </tr>
-                            ) : (
-                                items.map((booking) => (
-                                    <tr key={booking.id} className="hover:bg-secondary/20 transition-colors">
-                                        <td className="p-4 font-medium text-foreground">{booking.name}</td>
-                                        <td className="p-4 text-muted-foreground">
-                                            {booking.date} • {booking.time}
-                                        </td>
-                                        <td className="p-4 text-muted-foreground">{booking.party_size} Guests</td>
-                                        <td className="p-4 text-muted-foreground">{booking.email}</td>
-                                        <td className="p-4">
-                                            <span className={`px-2 py-1 rounded-full text-xs capitalize ${booking.status === 'confirmed'
-                                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                                : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                                                }`}>
-                                                {booking.status}
-                                            </span>
-                                        </td>
-                                        <td className="p-4">
-                                            <button className="text-accent hover:underline">Edit</button>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <BookingsTable initialBookings={bookings || []} />
         </div>
     );
 }

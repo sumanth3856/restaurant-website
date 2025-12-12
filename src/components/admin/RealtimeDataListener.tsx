@@ -1,0 +1,46 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+
+export default function RealtimeDataListener() {
+    const supabase = createClient();
+    const router = useRouter();
+
+    useEffect(() => {
+        const channel = supabase
+            .channel('realtime-db-changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'bookings'
+                },
+                () => {
+                    console.log('Realtime change detected in bookings, refreshing...');
+                    router.refresh();
+                }
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'menu_items'
+                },
+                () => {
+                    console.log('Realtime change detected in menu_items, refreshing...');
+                    router.refresh();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [supabase, router]);
+
+    return null; // Headless component
+}

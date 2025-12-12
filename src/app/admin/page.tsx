@@ -1,9 +1,11 @@
 import { Users, CalendarCheck } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 0;
 
 export default async function AdminDashboard() {
+    const supabase = await createClient();
+
     // Fetch stats from Supabase
     const { count: bookingCount } = await supabase.from('bookings').select('*', { count: 'exact', head: true });
 

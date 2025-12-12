@@ -53,3 +53,7 @@ create policy "Public can create bookings" on public.bookings
 -- Only admins/creators can view (simplified: allow public read for demo dashboard)
 create policy "Public can view bookings" on public.bookings
   for select using (true);
+
+-- Allow updates to booking status (REQUIRED for Booking Manager to work)
+create policy "Everyone can update bookings" on public.bookings
+  for update using (true);

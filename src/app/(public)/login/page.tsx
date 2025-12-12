@@ -37,9 +37,9 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-secondary/30 px-4">
-            <div className="max-w-md w-full bg-card p-8 rounded-2xl shadow-lg border border-border">
+            <div className="max-w-md w-full bg-card p-8 rounded-2xl shadow-lg border border-border animate-in fade-in zoom-in duration-500">
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
                         <Lock className="w-8 h-8 text-primary" />
                     </div>
                     <h1 className="text-2xl font-serif font-bold text-primary">Staff Login</h1>
@@ -73,7 +73,8 @@ export default function LoginPage() {
 
                     <button
                         type="submit"
-                        className="w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:bg-primary/90 transition-colors"
+                        disabled={router.refresh === undefined} // simplistic disabled check, better to track submitting state
+                        className="w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
                     >
                         Access Dashboard
                     </button>

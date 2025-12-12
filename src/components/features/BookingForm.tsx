@@ -4,10 +4,21 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { bookingSchema, BookingFormData } from "@/lib/validations";
-import { Calendar, Users, Clock, CheckCircle } from "lucide-react";
+import { Calendar, Users, Clock, CheckCircle, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { Loader } from "@/components/ui/Loader";
+
+// Helper for required label
+const RequiredLabel = ({ label, icon: Icon, htmlFor }: { label: string, icon: any, htmlFor?: string }) => (
+    <div className="flex items-center gap-2 mb-1.5">
+        <Icon className="w-4 h-4 text-accent" />
+        <label htmlFor={htmlFor} className="text-sm font-bold text-foreground tracking-wide flex items-center gap-1 cursor-pointer">
+            {label}
+            <Sparkles className="w-2.5 h-2.5 text-accent fill-accent animate-pulse" />
+        </label>
+    </div>
+);
 
 export function BookingForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -79,31 +90,27 @@ export function BookingForm() {
             <div className="grid md:grid-cols-2 gap-6">
                 {/* Date */}
                 <div className="space-y-2">
-                    <label htmlFor="date" className="text-sm font-medium flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-accent" /> Date
-                    </label>
+                    <RequiredLabel label="Date" icon={Calendar} htmlFor="date" />
                     <input
                         id="date"
                         type="date"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition-all",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.date && "border-red-500"
                         )}
                         min={new Date().toISOString().split('T')[0]}
                         {...register("date")}
                     />
-                    {errors.date && <p className="text-xs text-red-500">{errors.date.message}</p>}
+                    {errors.date && <p className="text-xs text-red-500 font-medium ml-1">{errors.date.message}</p>}
                 </div>
 
                 {/* Time */}
                 <div className="space-y-2">
-                    <label htmlFor="time" className="text-sm font-medium flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-accent" /> Time
-                    </label>
+                    <RequiredLabel label="Time" icon={Clock} htmlFor="time" />
                     <select
                         id="time"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition-all appearance-none",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all appearance-none shadow-sm",
                             errors.time && "border-red-500"
                         )}
                         {...register("time")}
@@ -119,82 +126,92 @@ export function BookingForm() {
                         <option value="20:30">8:30 PM</option>
                         <option value="21:00">9:00 PM</option>
                     </select>
-                    {errors.time && <p className="text-xs text-red-500">{errors.time.message}</p>}
+                    {errors.time && <p className="text-xs text-red-500 font-medium ml-1">{errors.time.message}</p>}
                 </div>
 
                 {/* Party Size */}
                 <div className="space-y-2">
-                    <label htmlFor="partySize" className="text-sm font-medium flex items-center gap-2">
-                        <Users className="w-4 h-4 text-accent" /> Guests
-                    </label>
+                    <RequiredLabel label="Guests" icon={Users} htmlFor="partySize" />
                     <input
                         id="partySize"
                         type="number"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition-all",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.partySize && "border-red-500"
                         )}
                         {...register("partySize")}
                     />
-                    {errors.partySize && <p className="text-xs text-red-500">{errors.partySize.message}</p>}
+                    {errors.partySize && <p className="text-xs text-red-500 font-medium ml-1">{errors.partySize.message}</p>}
                 </div>
             </div>
 
             <div className="h-px bg-border/50" />
 
             {/* Guest Details */}
-            <h3 className="font-serif font-bold text-lg text-primary">Contact Details</h3>
+            <h3 className="font-serif font-bold text-lg text-primary flex items-center gap-2">
+                Contact Details
+                <div className="h-1 w-12 bg-accent rounded-full" />
+            </h3>
 
             <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium">Full Name</label>
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                        <label htmlFor="name" className="text-sm font-bold text-foreground">Full Name</label>
+                        <Sparkles className="w-2.5 h-2.5 text-accent fill-accent animate-pulse" />
+                    </div>
                     <input
                         id="name"
                         type="text"
                         placeholder="John Doe"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition-all",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.name && "border-red-500"
                         )}
                         {...register("name")}
                     />
-                    {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+                    {errors.name && <p className="text-xs text-red-500 font-medium ml-1">{errors.name.message}</p>}
                 </div>
 
                 <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium">Email Address</label>
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                        <label htmlFor="email" className="text-sm font-bold text-foreground">Email Address</label>
+                        <Sparkles className="w-2.5 h-2.5 text-accent fill-accent animate-pulse" />
+                    </div>
                     <input
                         id="email"
                         type="email"
                         placeholder="john@example.com"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition-all",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.email && "border-red-500"
                         )}
                         {...register("email")}
                     />
-                    {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+                    {errors.email && <p className="text-xs text-red-500 font-medium ml-1">{errors.email.message}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-                    <label htmlFor="phone" className="text-sm font-medium">Phone Number</label>
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                        <label htmlFor="phone" className="text-sm font-bold text-foreground">Phone Number</label>
+                        <Sparkles className="w-2.5 h-2.5 text-accent fill-accent animate-pulse" />
+                    </div>
                     <input
                         id="phone"
                         type="tel"
                         placeholder="(555) 000-0000"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition-all",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.phone && "border-red-500"
                         )}
                         {...register("phone")}
                     />
-                    {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
+                    {errors.phone && <p className="text-xs text-red-500 font-medium ml-1">{errors.phone.message}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-                    <label className="text-sm font-medium">Special Requests (Optional)</label>
+                    <label className="text-sm font-bold text-foreground mb-1.5 block">Special Requests (Optional)</label>
                     <textarea
-                        className="w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition-all min-h-[100px]"
+                        className="w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all min-h-[100px] shadow-sm"
                         placeholder="Allergies, special occasions, seating preference..."
                         {...register("requests")}
                     />

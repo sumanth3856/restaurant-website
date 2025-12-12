@@ -5,6 +5,7 @@ import { Edit, Trash2, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { deleteMenuItem } from "@/app/actions/menuActions";
 
 interface MenuActionsProps {
     id: string;
@@ -21,20 +22,8 @@ export function MenuActions({ id, imageUrl }: MenuActionsProps) {
 
         setIsDeleting(true);
         try {
-            // Delete image if exists
-            if (imageUrl) {
-                const fileName = imageUrl.split('/').pop(); // simplistic extraction
-                // Better pattern: store path in DB or parse properly. 
-                // For now, assuming standard Supabase URL structure.
-                if (fileName) {
-                    await supabase.storage.from('menu-images').remove([fileName]);
-                }
-            }
-
-            const { error } = await supabase.from('menu_items').delete().eq('id', id);
-            if (error) throw error;
-
-            router.refresh();
+            await deleteMenuItem(id, imageUrl);
+            // router.refresh() handled by revalidatePath, but useful for client-side feedback if needed immediately
         } catch (error) {
             console.error("Delete failed:", error);
             alert("Failed to delete item.");

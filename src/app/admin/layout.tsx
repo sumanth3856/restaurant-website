@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { LayoutDashboard, CalendarDays, UtensilsCrossed, Settings, LogOut, Menu, X } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
+import RealtimeDataListener from "@/components/admin/RealtimeDataListener";
 
 export default function AdminLayout({
     children,
@@ -16,14 +17,24 @@ export default function AdminLayout({
     const pathname = usePathname();
     const supabase = createClient();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSigningOut, setIsSigningOut] = useState(false);
 
     const handleSignOut = async () => {
+        setIsSigningOut(true);
+        // Small delay to show animation (optional, but enhances "process" feel)
+        await new Promise(resolve => setTimeout(resolve, 800));
         await supabase.auth.signOut();
         router.push("/login"); // Redirect to login
         router.refresh();
     };
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+    // Reset loading states when pathname changes
+    useEffect(() => {
+        setIsSidebarOpen(false);
+        // We could reset settings loading here if we used a specific state for it
+    }, [pathname]);
 
     const navItems = [
         { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -33,7 +44,18 @@ export default function AdminLayout({
     ];
 
     return (
-        <div className="flex min-h-screen bg-secondary/20">
+        <div className="flex min-h-screen bg-secondary/20 relative">
+            <RealtimeDataListener />
+            {/* Signout Overlay */}
+            {isSigningOut && (
+                <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center animate-in fade-in duration-300">
+                    <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin-fast mb-4" />
+                    <p className="text-xl font-serif font-bold text-primary animate-pulse">Signing out...</p>
+                </div>
+            )}
+
+            {/* ... (Mobile Header etc) ... */}
+
             {/* Mobile Header */}
             <div className="md:hidden fixed top-0 w-full bg-background/95 backdrop-blur-md border-b border-border z-50 p-4 flex items-center justify-between shadow-sm">
                 <span className="text-xl font-serif font-bold text-primary">Maison Admin</span>
@@ -70,20 +92,32 @@ export default function AdminLayout({
                 <nav className="flex-grow p-4 space-y-2 overflow-y-auto">
                     {navItems.map(({ href, label, icon: Icon }) => {
                         const isActive = pathname === href;
+                        const isSettings = href === "/admin/settings";
+
                         return (
                             <Link
                                 key={href}
                                 href={href}
-                                onClick={() => setIsSidebarOpen(false)} // Close on navigate (mobile)
+                                // onClick handled by useEffect for consistency
                                 className={cn(
-                                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300",
+                                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group relative overflow-hidden",
                                     isActive
                                         ? "bg-primary text-primary-foreground shadow-md font-bold"
                                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                                 )}
                             >
-                                <Icon className="w-5 h-5" />
+                                {/* Spinning Settings Icon on Hover or Active, others scale */}
+                                <Icon className={cn(
+                                    "w-5 h-5 transition-transform duration-500",
+                                    isSettings ? "group-hover:rotate-180" : "group-hover:scale-110",
+                                    (isSettings && isActive) && "animate-spin-slow"
+                                )} />
+
                                 {label}
+
+                                {isActive && (
+                                    <div className="absolute right-4 w-2 h-2 rounded-full bg-accent animate-ping" />
+                                )}
                             </Link>
                         );
                     })}
@@ -92,6 +126,7 @@ export default function AdminLayout({
                 <div className="p-4 border-t border-border">
                     <button
                         onClick={handleSignOut}
+                        disabled={isSigningOut}
                         className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors"
                     >
                         <LogOut className="w-5 h-5" />

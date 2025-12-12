@@ -1,32 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  /* Modern Clean Professional Theme */
+  /* Crisp White Theme (Zinc-based) */
   --background: #ffffff;
-  --foreground: #1e293b;
-  /* Slate 800 */
+  --foreground: #09090b;
+  /* Zinc 950 */
 
-  --primary: #0f172a;
-  /* Slate 900 - Strong, bold, authoritative */
-  --primary-foreground: #f8fafc;
-  /* Slate 50 */
+  --primary: #09090b;
+  /* Zinc 950 - Sharp Black for actions */
+  --primary-foreground: #fafafa;
+  /* Zinc 50 */
 
-  --secondary: #f1f5f9;
-  /* Slate 100 - Gentle secondary backgrounds */
-  --secondary-foreground: #0f172a;
+  --secondary: #f4f4f5;
+  /* Zinc 100 - Crisp light gray */
+  --secondary-foreground: #18181b;
+  /* Zinc 900 */
 
-  --muted: #f8fafc;
-  --muted-foreground: #64748b;
-  /* Slate 500 */
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  /* Zinc 500 */
 
   --accent: #d97706;
-  /* Amber 600 - Warmth for a 'Delish' feel */
+  /* Amber 600 - Luxury Touch */
   --accent-foreground: #ffffff;
 
-  --border: #e2e8f0;
-  /* Slate 200 */
-  --input: #e2e8f0;
-  --ring: #0f172a;
+  --border: #e4e4e7;
+  /* Zinc 200 */
+  --input: #e4e4e7;
+  --ring: #09090b;
 
   --radius: 0.5rem;
 }
@@ -47,32 +48,33 @@
   --color-ring: var(--ring);
 
   --font-sans: var(--font-sans);
-  --font-serif: var(--font-serif);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #020617;
-    /* Slate 950 */
-    --foreground: #f8fafc;
-    /* Slate 50 */
+    --background: #09090b;
+    /* Zinc 950 */
+    --foreground: #fafafa;
+    /* Zinc 50 */
 
-    --primary: #f8fafc;
-    --primary-foreground: #020617;
+    --primary: #fafafa;
+    --primary-foreground: #09090b;
 
-    --secondary: #1e293b;
-    --secondary-foreground: #f8fafc;
+    --secondary: #27272a;
+    /* Zinc 800 */
+    --secondary-foreground: #fafafa;
 
-    --muted: #0f172a;
-    --muted-foreground: #94a3b8;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    /* Zinc 400 */
 
     --accent: #fbbf24;
     /* Amber 400 */
-    --accent-foreground: #020617;
+    --accent-foreground: #09090b;
 
-    --border: #1e293b;
-    --input: #1e293b;
-    --ring: #e2e8f0;
+    --border: #27272a;
+    --input: #27272a;
+    --ring: #e4e4e7;
   }
 }
 
@@ -82,11 +84,17 @@ body {
   font-family: var(--font-sans);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-serif);
+@keyframes spin-fast {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-fast {
+  animation: spin-fast 0.5s linear infinite;
+  /* Adjusted to 0.5s for "fast" but visible. 0.02s is too fast to see. I'll make it very fast though. */
+}
+
+.animate-spin-super-fast {
+  animation: spin-fast 0.2s linear infinite;
 }
