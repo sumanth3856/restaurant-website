@@ -1,93 +1,92 @@
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Star, ChefHat, Clock } from "lucide-react";
+import { ArrowRight, Star, ChefHat, Clock, Quote } from "lucide-react";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import FeaturedItemsSection from "@/components/features/FeaturedItemsSection";
+import { FeaturedItemsSkeleton } from "@/components/features/FeaturedItemsSkeleton";
+import { BookingForm } from "@/components/features/BookingForm";
+import { FadeIn } from "@/components/ui/FadeIn";
+import ReviewsSection from "@/components/features/ReviewsSection";
+import { ReviewsSkeleton } from "@/components/features/ReviewsSkeleton";
 
 export default async function Home() {
-  console.log("--- RENDERING HOME PAGE (3D Version) ---");
-  await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate loading for animations
-
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex flex-col overflow-hidden">
 
         {/* Cinematic Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1514362545857-3bc16549766b?q=80&w=1920&auto=format&fit=crop"
-            alt="Maison Delish High-End Dining"
+            src="/hero-background.jpg"
+            alt="Overhead view of a vibrant social dining experience at Maison Delish"
             fill
             className="object-cover scale-105 animate-slow-zoom"
             priority
             sizes="100vw"
-            quality={90}
+            quality={100}
           />
-          {/* Multi-layered Gradient for Depth */}
+          {/* Lighter Gradient for Better Image Visibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30" />
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-black/20" />
+          {/* Spotlight Effect behind text */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.5)_0%,transparent_70%)]" />
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-8 p-8 md:p-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+        <div className="relative z-10 container mx-auto px-4 flex-grow flex flex-col justify-center items-center h-full pb-20 pt-32">
+          <FadeIn className="max-w-5xl mx-auto text-center space-y-8 md:space-y-10" delay={0.2}>
 
-            {/* Top Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 border border-accent/30 backdrop-blur-md text-accent-foreground mb-4 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-              <Star className="w-4 h-4 text-accent fill-accent animate-pulse" />
-              <span className="text-xs md:text-sm font-semibold tracking-wider uppercase text-accent">Michelin Guide Recommended 2024</span>
+            {/* Premium Eyebrow */}
+            <div className="inline-flex items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 bg-white/40 backdrop-blur-md px-8 py-2 rounded-full border border-white/20 shadow-sm">
+              <div className="h-[1px] w-8 md:w-16 bg-black/60"></div>
+              <span className="text-black uppercase tracking-[0.3em] text-xs md:text-sm font-bold">Est. 2024</span>
+              <div className="h-[1px] w-8 md:w-16 bg-black/60"></div>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white tracking-tight leading-[1.1] drop-shadow-2xl">
-              Elevate Your <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/70 italic">
-                Senses
-              </span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-medium text-white tracking-wide leading-[1.1] drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
+              <span className="block mb-2 drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">Taste the</span>
+              <span className="font-thin italic drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">Extraordinary</span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg md:text-2xl text-zinc-300 font-light max-w-2xl mx-auto leading-relaxed drop-shadow-md">
-              Experience the symphony of flavors where culinary artistry meets
-              <span className="text-white font-medium"> timeless elegance</span>.
+            <p className="text-lg md:text-2xl text-white font-normal max-w-2xl mx-auto leading-relaxed tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              A culinary journey that transcends the ordinary. Experience artistry on every plate.
             </p>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Premium Minimalist */}
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-8">
               <Link
                 href="/book"
-                className="group relative px-8 py-4 bg-accent hover:bg-accent/90 text-white rounded-full font-semibold text-lg transition-all 
-                shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:-translate-y-1 overflow-hidden"
+                className="group relative px-10 py-4 bg-white text-black rounded-full font-serif font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] overflow-hidden"
               >
-                <span className="relative z-10 flex items-center gap-2">
-                  Reserve a Table
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <span className="relative z-10 flex items-center gap-3">
+                  Reserve Your Table
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
               </Link>
 
               <Link
                 href="/menu"
-                className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-full font-semibold text-lg backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all flex items-center gap-2 hover:-translate-y-1"
+                className="group px-10 py-4 bg-transparent hover:bg-white/10 text-white rounded-full font-serif font-medium text-lg border border-white/40 hover:border-white transition-all duration-300 backdrop-blur-sm flex items-center gap-3"
               >
-                <ChefHat className="w-5 h-5" />
-                Explore Menu
+                View Menu
               </Link>
             </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce text-white/50 z-20">
-          <span className="text-[10px] uppercase tracking-[0.2em]">Scroll</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
+          </FadeIn>
         </div>
       </section>
 
       <SectionDivider />
 
-      <FeaturedItemsSection />
+      <Suspense fallback={<FeaturedItemsSkeleton />}>
+        <FeaturedItemsSection />
+      </Suspense>
+
+      <Suspense fallback={<ReviewsSkeleton />}>
+        <ReviewsSection />
+      </Suspense>
 
     </div>
   );

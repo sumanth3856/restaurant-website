@@ -2,6 +2,8 @@
 
 :root {
   /* Crisp White Theme (Zinc-based) */
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
   --background: #ffffff;
   --foreground: #09090b;
   /* Zinc 950 */
@@ -48,33 +50,38 @@
   --color-ring: var(--ring);
 
   --font-sans: var(--font-sans);
+  --font-price: var(--font-price);
+}
+
+.font-price {
+  font-family: var(--font-price), sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #09090b;
+    --background: #ffffff;
+    /* Force white background in dark mode too */
+    --foreground: #09090b;
     /* Zinc 950 */
-    --foreground: #fafafa;
-    /* Zinc 50 */
 
-    --primary: #fafafa;
-    --primary-foreground: #09090b;
+    --primary: #09090b;
+    --primary-foreground: #fafafa;
 
-    --secondary: #27272a;
-    /* Zinc 800 */
-    --secondary-foreground: #fafafa;
+    --secondary: #f4f4f5;
+    /* Zinc 100 */
+    --secondary-foreground: #18181b;
 
-    --muted: #27272a;
-    --muted-foreground: #a1a1aa;
-    /* Zinc 400 */
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    /* Zinc 500 */
 
-    --accent: #fbbf24;
-    /* Amber 400 */
-    --accent-foreground: #09090b;
+    --accent: #f59e0b;
+    /* Amber 500 - High Contrast for Dark Mode */
+    --accent-foreground: #000000;
 
-    --border: #27272a;
-    --input: #27272a;
-    --ring: #e4e4e7;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #09090b;
   }
 }
 
@@ -82,6 +89,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-weight: 600;
 }
 
 @keyframes spin-fast {
@@ -97,4 +105,68 @@ body {
 
 .animate-spin-super-fast {
   animation: spin-fast 0.2s linear infinite;
+}
+
+/* Global Focus Styles for Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+  transition: outline-offset 0.1s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slowZoom {
+  from {
+    transform: scale(1.05);
+  }
+
+  to {
+    transform: scale(1.15);
+  }
+}
+
+.animate-in {
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+  /* Start invisible */
+}
+
+.fade-in {
+  animation-name: fadeIn;
+}
+
+.slide-in-from-bottom-4 {
+  animation-name: slideInFromBottom;
+}
+
+.animate-slow-zoom {
+  animation: slowZoom 20s linear infinite alternate;
+}
+
+.duration-1000 {
+  animation-duration: 1s;
 }

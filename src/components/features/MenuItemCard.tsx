@@ -16,6 +16,7 @@ export function MenuItemCard({ item }: MenuItemCardProps) {
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 200px"
+                        unoptimized
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-muted-foreground/30 font-medium">
@@ -30,7 +31,7 @@ export function MenuItemCard({ item }: MenuItemCardProps) {
                         <h3 className="text-xl font-serif font-bold text-primary group-hover:text-accent transition-colors">
                             {item.name}
                         </h3>
-                        <span className="font-semibold text-lg text-primary">
+                        <span className="font-price font-semibold text-lg text-primary tracking-wide">
                             ₹{item.price}
                         </span>
                     </div>

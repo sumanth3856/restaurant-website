@@ -1,10 +1,25 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google"; // Modern, clean font
-import "./globals.css";
+import { Playfair_Display, Inter, Montserrat } from "next/font/google"; // 
 
-const manrope = Manrope({
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-price",
+  weight: ["400", "500", "600", "700"],
+});
+
+import "./globals.css";
+import { Toaster } from "sonner";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["400", "700", "900"],
+});
+
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: ["400", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -52,9 +67,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${manrope.variable} antialiased font-sans bg-background text-foreground flex flex-col min-h-screen`}
+        className={`${playfair.variable} ${inter.variable} ${montserrat.variable} antialiased font-sans bg-background text-foreground flex flex-col min-h-screen`}
       >
         {children}
+        <Toaster richColors position="top-center" closeButton theme="system" />
       </body>
     </html>
   );
