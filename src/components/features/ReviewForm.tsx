@@ -97,8 +97,7 @@ export function ReviewForm() {
                         name="name"
                         autoComplete="name"
                         required
-                        placeholder="John Doe"
-                        className="w-full p-3.5 rounded-lg bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm placeholder:text-muted-foreground/50"
+                        className="w-full p-3.5 rounded-lg bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm placeholder:text-muted-foreground/50"
                     />
                 </div>
 
@@ -110,9 +109,8 @@ export function ReviewForm() {
                     <textarea
                         id="comment"
                         name="comment"
-                        placeholder="The steak was absolutely divine..."
                         rows={5}
-                        className="w-full p-3.5 rounded-lg bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all resize-none shadow-sm placeholder:text-muted-foreground/50"
+                        className="w-full p-3.5 rounded-lg bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all resize-none shadow-sm placeholder:text-muted-foreground/50"
                     />
                 </div>
             </div>

@@ -1,12 +1,12 @@
 import Image from "next/image";
 
 const images = [
-    { src: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop", alt: "Signature Cocktail" },
-    { src: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop", alt: "Gourmet Entree" },
-    { src: "https://images.unsplash.com/photo-1550966871-3ed3c47e2ce2?q=80&w=800&auto=format&fit=crop", alt: "Fine Dining Atmosphere" }, // Restaurant interior
-    { src: "https://images.unsplash.com/photo-1577106263724-2c8e03bfe9f4?q=80&w=800&auto=format&fit=crop", alt: "Chef Preparation" }, // Chef
-    { src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop", alt: "Interior Design" }, // Interior
-    { src: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80&w=800&auto=format&fit=crop", alt: "Dessert Selection" },
+    { src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop", alt: "Signature Ambience" }, // Hero
+    { src: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop", alt: "Gourmet Salmon" }, // Tall
+    { src: "https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=800&auto=format&fit=crop", alt: "Chef's Finishing Touch" },
+    { src: "https://images.unsplash.com/photo-1550966871-3ed3c47e2ce2?q=80&w=800&auto=format&fit=crop", alt: "Private Dining" },
+    { src: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1200&auto=format&fit=crop", alt: "Handcrafted Cocktails" }, // Wide
+    { src: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80&w=800&auto=format&fit=crop", alt: "Decadent Desserts" },
 ];
 
 export default async function GalleryPage() {
@@ -45,7 +45,9 @@ export default async function GalleryPage() {
                                 alt={img.alt}
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                sizes={index === 0 ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
+                                sizes={(index === 0 || index === 4) ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
+                                priority={index === 0}
+                                quality={85}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                                 <span className="text-white font-serif text-2xl font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">

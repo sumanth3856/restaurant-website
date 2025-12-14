@@ -16,43 +16,44 @@ export default async function Home() {
 
         {/* Cinematic Background Image */}
         <div className="absolute inset-0 z-0">
-          <Image
-            src="/hero-background.jpg"
-            alt="Overhead view of a vibrant social dining experience at Maison Delish"
-            fill
-            className="object-cover scale-105 animate-slow-zoom"
-            priority
-            sizes="100vw"
-            quality={100}
-          />
+          <video
+            className="object-cover w-full h-full object-center md:scale-105"
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+            <source src="/hero-video.webm" type="video/webm" />
+          </video>
           {/* Lighter Gradient for Better Image Visibility */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30" />
-          <div className="absolute inset-0 bg-black/20" />
-          {/* Spotlight Effect behind text */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.5)_0%,transparent_70%)]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/30" />
+          <div className="absolute inset-0 bg-black/0" />
+          {/* Cinematic Dark Overlay for Maximum Contrast */}
+          <div className="absolute inset-0 bg-black/0" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0" />
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 container mx-auto px-4 flex-grow flex flex-col justify-center items-center h-full pb-12 pt-32">
+        <div className="relative z-10 container mx-auto px-4 flex-grow flex flex-col justify-end items-center h-full pb-10 pt-24 md:pt-32">
           <FadeIn className="max-w-5xl mx-auto text-center space-y-8 md:space-y-10" delay={0.2}>
 
             {/* Premium Eyebrow */}
-            <div className="inline-flex items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 bg-white/40 backdrop-blur-md px-8 py-2 rounded-full border border-white/20 shadow-sm">
-              <div className="h-[1px] w-8 md:w-16 bg-black/60"></div>
-              <span className="text-black uppercase tracking-[0.3em] text-xs md:text-sm font-bold">Est. 2024</span>
-              <div className="h-[1px] w-8 md:w-16 bg-black/60"></div>
-            </div>
+            {/* <div className="flex items-center justify-center gap-4 animate-fade-in">
+              <div className="h-[1px] w-12 bg-white/40" />
+              <span className="text-white/80 font-medium tracking-[0.3em] text-sm uppercase">Est. 2024</span>
+              <div className="h-[1px] w-12 bg-white/40" />
+            </div> */}
 
             {/* Main Headline */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-medium text-white tracking-wide leading-[1.1] drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
-              <span className="block mb-2 drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">Taste the</span>
-              <span className="font-thin italic drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">Extraordinary</span>
-            </h1>
+            {/* <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white leading-[1.1] tracking-tight drop-shadow-2xl">
+              Taste the <br className="hidden md:block" />
+              <span className="italic text-primary/90">Extraordinary</span>
+            </h1> */}
 
             {/* Subheadline */}
-            <p className="text-lg md:text-2xl text-white font-normal max-w-2xl mx-auto leading-relaxed tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            {/* <p className="text-lg md:text-2xl text-white font-normal max-w-2xl mx-auto leading-relaxed tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               A culinary journey that transcends the ordinary. Experience artistry on every plate.
-            </p>
+            </p> */}
 
             {/* CTA Buttons - Premium Minimalist */}
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-8">

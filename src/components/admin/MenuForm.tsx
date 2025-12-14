@@ -116,8 +116,7 @@ export default function MenuForm({ initialData }: MenuFormProps) {
                         <RequiredLabel label="Name" />
                         <input
                             {...register("name")}
-                            className="w-full p-2.5 rounded-lg border border-border bg-background/50 focus:bg-background focus:ring-2 focus:ring-accent/20 outline-none transition-all shadow-sm font-medium"
-                            placeholder="e.g. Truffle Pasta"
+                            className="w-full p-2.5 rounded-lg border border-zinc-400 bg-background/50 focus:bg-background focus:ring-2 focus:ring-accent/20 outline-none transition-all shadow-sm font-medium"
                         />
                         {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
                     </div>
@@ -128,7 +127,7 @@ export default function MenuForm({ initialData }: MenuFormProps) {
                             type="number"
                             step="0.01"
                             {...register("price")}
-                            className="w-full p-2.5 rounded-lg border border-border bg-background/50 focus:bg-background focus:ring-2 focus:ring-accent/20 outline-none transition-all shadow-sm font-mono"
+                            className="w-full p-2.5 rounded-lg border border-zinc-400 bg-background/50 focus:bg-background focus:ring-2 focus:ring-accent/20 outline-none transition-all shadow-sm font-mono"
                         />
                         {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price.message}</p>}
                     </div>
@@ -137,7 +136,7 @@ export default function MenuForm({ initialData }: MenuFormProps) {
                         <RequiredLabel label="Category" />
                         <select
                             {...register("category")}
-                            className="w-full p-2.5 rounded-lg border border-border bg-background/50 focus:bg-background focus:ring-2 focus:ring-accent/20 outline-none transition-all shadow-sm"
+                            className="w-full p-2.5 rounded-lg border border-zinc-400 bg-background/50 focus:bg-background focus:ring-2 focus:ring-accent/20 outline-none transition-all shadow-sm"
                         >
                             {CATEGORIES.map((cat) => (
                                 <option key={cat} value={cat}>{cat}</option>
@@ -149,7 +148,7 @@ export default function MenuForm({ initialData }: MenuFormProps) {
 
                 <div className="space-y-4">
                     <label className="block text-sm font-medium mb-1">Image</label>
-                    <div className="border-2 border-dashed border-border rounded-lg p-4 flex flex-col items-center justify-center min-h-[200px] relative bg-secondary/20">
+                    <div className="border-2 border-dashed border-zinc-400 rounded-lg p-4 flex flex-col items-center justify-center min-h-[200px] relative bg-secondary/20">
                         {previewUrl ? (
                             <div className="relative w-full h-full min-h-[200px]">
                                 <Image
@@ -192,7 +191,6 @@ export default function MenuForm({ initialData }: MenuFormProps) {
                     {...register("description")}
                     rows={4}
                     className="w-full p-2 border rounded-md bg-background"
-                    placeholder="Describe the dish..."
                 />
             </div>
 
@@ -208,7 +206,7 @@ export default function MenuForm({ initialData }: MenuFormProps) {
                 <button
                     type="button"
                     onClick={() => router.back()}
-                    className="px-6 py-2 border border-border rounded-lg hover:bg-secondary transition-colors"
+                    className="px-6 py-2 border border-zinc-400 rounded-lg hover:bg-secondary transition-colors"
                 >
                     Cancel
                 </button>

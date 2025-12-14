@@ -163,8 +163,10 @@ body {
   animation-name: slideInFromBottom;
 }
 
-.animate-slow-zoom {
-  animation: slowZoom 20s linear infinite alternate;
+@media (min-width: 768px) {
+  .animate-slow-zoom {
+    animation: slowZoom 20s linear infinite alternate;
+  }
 }
 
 .duration-1000 {

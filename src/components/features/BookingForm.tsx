@@ -114,7 +114,7 @@ export function BookingForm() {
                         id="date"
                         type="date"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.date && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         min={new Date().toISOString().split('T')[0]}
@@ -129,7 +129,7 @@ export function BookingForm() {
                     <select
                         id="time"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all appearance-none shadow-sm",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all appearance-none shadow-sm",
                             errors.time && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("time")}
@@ -155,7 +155,7 @@ export function BookingForm() {
                         id="partySize"
                         type="number"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.partySize && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("partySize")}
@@ -182,9 +182,8 @@ export function BookingForm() {
                         id="name"
                         type="text"
                         autoComplete="name"
-                        placeholder="John Doe"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.name && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("name")}
@@ -201,9 +200,8 @@ export function BookingForm() {
                         id="email"
                         type="email"
                         autoComplete="email"
-                        placeholder="john@example.com"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.email && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("email")}
@@ -220,9 +218,8 @@ export function BookingForm() {
                         id="phone"
                         type="tel"
                         autoComplete="tel"
-                        placeholder="(555) 000-0000"
                         className={cn(
-                            "w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
+                            "w-full p-3 rounded-md bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all shadow-sm",
                             errors.phone && "border-red-500 bg-red-500/5 focus:ring-red-500/20 focus:border-red-500"
                         )}
                         {...register("phone")}
@@ -233,8 +230,7 @@ export function BookingForm() {
                 <div className="space-y-2 md:col-span-2">
                     <label className="text-sm font-bold text-foreground mb-1.5 block">Special Requests (Optional)</label>
                     <textarea
-                        className="w-full p-3 rounded-md bg-secondary/50 border border-input focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all min-h-[100px] shadow-sm"
-                        placeholder="Allergies, special occasions, seating preference..."
+                        className="w-full p-3 rounded-md bg-secondary/50 border border-zinc-400 focus:ring-2 focus:ring-accent/20 focus:border-accent/40 outline-none transition-all min-h-[100px] shadow-sm"
                         {...register("requests")}
                     />
                 </div>

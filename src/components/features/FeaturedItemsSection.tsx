@@ -81,7 +81,7 @@ export default async function FeaturedItemsSection() {
                                     </p>
 
                                     <div className="pt-4 border-t border-border flex items-center justify-between">
-                                        <Link href="/menu" className="text-sm font-medium text-primary flex items-center gap-1 group/link">
+                                        <Link href={`/menu/${item.id}`} className="text-sm font-medium text-primary flex items-center gap-1 group/link">
                                             View Details
                                             <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                                         </Link>
