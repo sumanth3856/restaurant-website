@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function upsertMenuItem(data: any, id?: number) {
+export async function upsertMenuItem(data: Record<string, unknown>, id?: number) {
     const supabase = await createClient();
 
     let error;

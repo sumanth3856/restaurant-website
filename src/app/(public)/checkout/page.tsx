@@ -159,7 +159,7 @@ export default function CheckoutPage() {
                             <button
                                 type="submit"
                                 disabled={isPending || isSubmitting}
-                                className="btn-primary w-full h-12 text-lg font-bold flex items-center justify-center gap-2"
+                                className="w-full h-14 bg-black text-white hover:bg-black/90 rounded-xl text-lg font-bold flex items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {(isPending || isSubmitting) ? (
                                     <>

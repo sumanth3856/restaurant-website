@@ -37,12 +37,13 @@ export async function sendBookingConfirmationEmail({
 
         logger.log("Email sent successfully:", data);
         return { success: true, data };
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error("Unexpected email error:", error);
+        const err = error as Error;
         logger.error("Error details:", {
-            message: error?.message,
-            stack: error?.stack,
-            name: error?.name,
+            message: err?.message || 'Unknown error',
+            stack: err?.stack,
+            name: err?.name,
         });
         return { success: false, error: "An unexpected error occurred while sending the confirmation email." };
     }

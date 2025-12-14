@@ -15,7 +15,8 @@ import { sendBookingConfirmationEmail } from "@/app/actions/sendEmail";
 import { logger } from "@/lib/logger";
 
 // Helper for required label
-const RequiredLabel = ({ label, icon: Icon, htmlFor }: { label: string, icon: any, htmlFor?: string }) => (
+import { LucideIcon } from "lucide-react";
+const RequiredLabel = ({ label, icon: Icon, htmlFor }: { label: string, icon: LucideIcon, htmlFor?: string }) => (
     <div className="flex items-center gap-2 mb-1.5">
         <Icon className="w-4 h-4 text-accent" />
         <label htmlFor={htmlFor} className="text-sm font-bold text-foreground tracking-wide flex items-center gap-1 cursor-pointer">

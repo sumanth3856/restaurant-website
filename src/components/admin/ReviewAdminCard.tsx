@@ -5,8 +5,17 @@ import { updateReviewStatus, deleteReview } from "@/app/actions/reviews";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+interface Review {
+    id: number;
+    name: string;
+    created_at: string;
+    status: 'pending' | 'approved' | 'rejected';
+    rating: number;
+    comment: string;
+}
+
 interface ReviewCardProps {
-    review: any;
+    review: Review;
 }
 
 export function ReviewAdminCard({ review }: ReviewCardProps) {

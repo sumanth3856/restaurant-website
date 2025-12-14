@@ -38,10 +38,10 @@ describe('BookingForm', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         // Reset supabase mock
-        (supabase.from as any).mockReturnValue({
+        vi.mocked(supabase.from).mockReturnValue({
             insert: vi.fn().mockResolvedValue({ error: null })
-        });
-        (emailActions.sendBookingConfirmationEmail as any).mockResolvedValue({ success: true });
+        } as any);
+        vi.mocked(emailActions.sendBookingConfirmationEmail).mockResolvedValue({ success: true, data: { id: 'mock-id' } as any });
     });
 
     it('submits the form successfully with valid data', async () => {
@@ -75,7 +75,7 @@ describe('BookingForm', () => {
 
     it('handles email failure but still shows success', async () => {
         // Mock email failure
-        (emailActions.sendBookingConfirmationEmail as any).mockResolvedValue({
+        vi.mocked(emailActions.sendBookingConfirmationEmail).mockResolvedValue({
             success: false,
             error: 'SMTP Error'
         });
@@ -102,9 +102,9 @@ describe('BookingForm', () => {
 
     it('handles database insertion error', async () => {
         // Mock supabase insert error
-        (supabase.from as any).mockReturnValue({
+        vi.mocked(supabase.from).mockReturnValue({
             insert: vi.fn().mockResolvedValue({ error: { message: 'DB Error' } })
-        });
+        } as any);
 
         render(<BookingForm />);
 

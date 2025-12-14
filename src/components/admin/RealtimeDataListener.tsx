@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { logger } from "@/lib/logger";
 
 export default function RealtimeDataListener() {
     const supabase = createClient();
@@ -19,7 +20,7 @@ export default function RealtimeDataListener() {
                     table: 'bookings'
                 },
                 () => {
-                    console.log('Realtime change detected in bookings, refreshing...');
+                    logger.log('Realtime change detected in bookings, refreshing...');
                     router.refresh();
                 }
             )
@@ -31,7 +32,7 @@ export default function RealtimeDataListener() {
                     table: 'menu_items'
                 },
                 () => {
-                    console.log('Realtime change detected in menu_items, refreshing...');
+                    logger.log('Realtime change detected in menu_items, refreshing...');
                     router.refresh();
                 }
             )

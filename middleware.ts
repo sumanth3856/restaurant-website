@@ -6,29 +6,33 @@ export async function middleware(request: NextRequest) {
     // 1. IP RESTRICTION (Layer 1 Security)
     // Protect all routes starting with /admin
     if (request.nextUrl.pathname.startsWith('/admin')) {
-        const allowedIps = (process.env.ADMIN_ALLOWED_IP || '').split(',').map(ip => ip.trim())
+        const allowedIps = (process.env.ADMIN_ALLOWED_IP || '').split(',').map(ip => ip.trim()).filter(Boolean)
 
         // If IPs are set, validate them
-        if (allowedIps.length > 0 && !(allowedIps.length === 1 && allowedIps[0] === '')) {
-            // Get IP
+        if (allowedIps.length > 0) {
+            // Get IP - STRICT MODE (No default to 127.0.0.1 unless explicitly found)
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            let ip = (request as any).ip ?? request.headers.get('x-forwarded-for') ?? '127.0.0.1'
+            let ip = (request as any).ip ?? request.headers.get('x-forwarded-for') ?? null
 
             // Handle forwarded-for possibly being a list
-            if (ip.includes(' , ')) {
+            if (ip && ip.includes(' , ')) {
                 ip = ip.split(' , ')[0]
-            } else if (ip.includes(',')) {
+            } else if (ip && ip.includes(',')) {
                 ip = ip.split(',')[0]
             }
-            ip = ip.trim()
 
-            // Normalize IPv6 localhost
-            if (ip === '::1') ip = '127.0.0.1'
+            if (ip) {
+                ip = ip.trim()
+                // Normalize IPv6 localhost
+                if (ip === '::1') ip = '127.0.0.1'
+            }
+
+            console.log(`[Middleware] Checking access for IP: ${ip} to ${request.nextUrl.pathname}`)
 
             // Check Match
-            if (!allowedIps.includes(ip)) {
+            if (!ip || !allowedIps.includes(ip)) {
                 // Log access attempt for security auditing
-                console.warn(`[Blocked Admin Access] IP: ${ip} tried to access ${request.nextUrl.pathname}. Allowed: ${allowedIps.join(', ')}`)
+                console.warn(`[Blocked Admin Access] IP: ${ip || 'UNKNOWN'} tried to access ${request.nextUrl.pathname}. Allowed: ${allowedIps.join(', ')}`)
 
                 // Rewrite to the 403 page
                 const url = request.nextUrl.clone()

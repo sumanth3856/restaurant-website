@@ -66,7 +66,7 @@ describe('BookingsTable', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        (useRouter as any).mockReturnValue(mockRouter);
+        vi.mocked(useRouter).mockReturnValue(mockRouter as any);
     });
 
     it('renders empty state when no bookings match filter', () => {

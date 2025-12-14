@@ -11,5 +11,8 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, './src'),
         },
+        coverage: {
+            reporter: ['text', 'json-summary'],
+        },
     },
 });

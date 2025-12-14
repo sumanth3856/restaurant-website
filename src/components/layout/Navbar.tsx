@@ -21,7 +21,7 @@ export function Navbar() {
 
     // Hydration fix for cart count
     const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []); // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => setMounted(true), []);  
 
     // Handle scroll effect
     useEffect(() => {
