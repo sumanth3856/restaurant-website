@@ -4,23 +4,23 @@
  * In production: Suppresses debug/info logs, sanitizes error logs.
  */
 export const logger = {
-    log: (...args: any[]) => {
+    log: (...args: unknown[]) => {
         if (process.env.NODE_ENV === "development") {
             console.log(...args);
         }
     },
 
-    info: (...args: any[]) => {
+    info: (...args: unknown[]) => {
         if (process.env.NODE_ENV === "development") {
             console.info(...args);
         }
     },
 
-    warn: (...args: any[]) => {
+    warn: (...args: unknown[]) => {
         console.warn(...args);
     },
 
-    error: (...args: any[]) => {
+    error: (...args: unknown[]) => {
         // specific error sanitization logic can go here
         // for now, we allow errors but ensure we don't dump raw objects if possible
         console.error(...args);

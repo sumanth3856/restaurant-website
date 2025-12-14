@@ -58,6 +58,8 @@ export const metadata: Metadata = {
 
 // Imports removed
 
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -69,7 +71,9 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${playfair.variable} ${inter.variable} ${montserrat.variable} antialiased font-sans bg-background text-foreground flex flex-col min-h-screen`}
       >
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
         <Toaster richColors position="top-center" closeButton theme="system" />
       </body>
     </html>

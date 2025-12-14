@@ -1,11 +1,9 @@
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Star, ChefHat, Clock, Quote } from "lucide-react";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import FeaturedItemsSection from "@/components/features/FeaturedItemsSection";
 import { FeaturedItemsSkeleton } from "@/components/features/FeaturedItemsSkeleton";
-import { BookingForm } from "@/components/features/BookingForm";
 import { FadeIn } from "@/components/ui/FadeIn";
 import ReviewsSection from "@/components/features/ReviewsSection";
 import { ReviewsSkeleton } from "@/components/features/ReviewsSkeleton";
