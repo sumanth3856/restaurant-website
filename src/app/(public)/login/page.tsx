@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { LoginLoader } from "@/components/ui/LoginLoader";
+
+import { useRateLimit } from "@/hooks/useRateLimit";
 
 export default function LoginPage() {
     const supabase = createClient();
@@ -11,32 +14,38 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const { isSubmitting: isLoading, withRateLimit } = useRateLimit();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(""); // Clear previous errors
 
-        try {
-            const { error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
+        await withRateLimit(async () => {
+            try {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
 
-            if (error) {
-                console.error("Login error:", error.message);
-                setError(error.message);
-                return;
+                if (error) {
+                    console.error("Login error:", error.message);
+                    setError(error.message);
+                    return;
+                }
+
+                // Keep loading true while redirecting for smoother UX
+                router.push("/admin");
+                router.refresh();
+            } catch {
+                setError("An unexpected error occurred.");
             }
-
-            router.push("/admin");
-            router.refresh(); // Refresh so server components re-run with new cookie
-        } catch {
-            setError("An unexpected error occurred.");
-        }
+        });
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-secondary/30 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-secondary/30 px-4 relative">
+            {isLoading && <LoginLoader />}
+
             <div className="max-w-md w-full bg-card p-8 rounded-2xl shadow-lg border border-border animate-in fade-in zoom-in duration-500">
                 <div className="text-center mb-8">
                     <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
@@ -56,6 +65,7 @@ export default function LoginPage() {
                             className="w-full p-3 rounded-lg border border-input focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                             placeholder="admin@example.com"
                             required
+                            disabled={isLoading}
                         />
                     </div>
                     <div>
@@ -67,14 +77,15 @@ export default function LoginPage() {
                             className="w-full p-3 rounded-lg border border-input focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                             placeholder="••••••••"
                             required
+                            disabled={isLoading}
                         />
                         {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
                     </div>
 
                     <button
                         type="submit"
-                        disabled={router.refresh === undefined} // simplistic disabled check, better to track submitting state
-                        className="w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                        disabled={isLoading}
+                        className="w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         Access Dashboard
                     </button>

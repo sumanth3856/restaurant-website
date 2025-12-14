@@ -35,10 +35,12 @@ const RequiredLabel = ({ label }: { label: string }) => (
     </div>
 );
 
+import { useRateLimit } from "@/hooks/useRateLimit";
+
 export default function MenuForm({ initialData }: MenuFormProps) {
     const router = useRouter();
     const supabase = createClient();
-    const [loading, setLoading] = useState(false);
+    const { isSubmitting: loading, withRateLimit } = useRateLimit();
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(initialData?.image || null);
 
@@ -82,29 +84,28 @@ export default function MenuForm({ initialData }: MenuFormProps) {
     };
 
     const onSubmit = async (data: MenuFormValues) => {
-        setLoading(true);
-        try {
-            let imageUrl = data.image;
+        await withRateLimit(async () => {
+            try {
+                let imageUrl = data.image;
 
-            if (imageFile) {
-                imageUrl = await uploadImage(imageFile);
+                if (imageFile) {
+                    imageUrl = await uploadImage(imageFile);
+                }
+
+                const payload = {
+                    ...data,
+                    image: imageUrl,
+                };
+
+                await upsertMenuItem(payload, initialData?.id);
+
+                router.push("/admin/menu");
+                router.refresh();
+            } catch (error) {
+                console.error("Error saving menu item:", error);
+                alert("Failed to save menu item. See console for details.");
             }
-
-            const payload = {
-                ...data,
-                image: imageUrl,
-            };
-
-            await upsertMenuItem(payload, initialData?.id);
-
-            router.push("/admin/menu");
-            router.refresh();
-        } catch (error) {
-            console.error("Error saving menu item:", error);
-            alert("Failed to save menu item. See console for details.");
-        } finally {
-            setLoading(false);
-        }
+        });
     };
 
     return (

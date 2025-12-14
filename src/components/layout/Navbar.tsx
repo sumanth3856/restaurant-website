@@ -111,8 +111,8 @@ export function Navbar() {
                             key={link.href}
                             href={link.href}
                             className={cn(
-                                "text-lg font-medium transition-colors p-2 rounded-md hover:bg-accent/10",
-                                pathname === link.href ? "text-primary font-bold" : "text-foreground"
+                                "text-lg font-bold tracking-wide transition-colors p-3 rounded-md hover:bg-accent/10 border-b border-border/10 last:border-0",
+                                pathname === link.href ? "text-primary" : "text-foreground"
                             )}
                             onClick={() => setIsOpen(false)}
                         >

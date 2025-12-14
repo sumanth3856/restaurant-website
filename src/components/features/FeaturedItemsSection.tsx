@@ -28,13 +28,13 @@ export default async function FeaturedItemsSection() {
     }
 
     return (
-        <section className="py-24 bg-background relative overflow-hidden">
+        <section className="py-12 md:py-16 bg-background relative overflow-hidden">
             {/* Decor */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
             <div className="container mx-auto px-4 relative z-10">
                 <FadeIn>
-                    <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                    <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12 space-y-4">
                         <span className="text-accent text-sm font-bold tracking-widest uppercase">Our Masterpieces</span>
                         <h2 className="text-4xl md:text-5xl font-serif font-bold text-primary">
                             Curated <span className="italic font-light">Selections</span>
@@ -46,7 +46,7 @@ export default async function FeaturedItemsSection() {
                 </FadeIn>
 
                 <FadeIn delay={0.2} direction="up">
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div className="grid md:grid-cols-3 gap-6 md:gap-8">
                         {featuredItems.map((item) => (
                             <div key={item.id} className="group relative bg-card rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
                                 {/* Image Container */}
@@ -58,7 +58,6 @@ export default async function FeaturedItemsSection() {
                                             fill
                                             className="object-cover group-hover:scale-110 transition-transform duration-700"
                                             sizes="(max-width: 768px) 100vw, 33vw"
-                                            unoptimized
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-secondary flex items-center justify-center">
@@ -94,7 +93,7 @@ export default async function FeaturedItemsSection() {
                 </FadeIn>
 
                 <FadeIn delay={0.4}>
-                    <div className="text-center mt-16">
+                    <div className="text-center mt-10 md:mt-12">
                         <Link
                             href="/menu"
                             className="inline-flex items-center gap-2 px-8 py-3 border border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-white transition-all"

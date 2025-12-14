@@ -6,24 +6,25 @@ import { toast } from "sonner";
 import { submitReview } from "@/app/actions/reviews";
 import { cn } from "@/lib/utils";
 
+import { useRateLimit } from "@/hooks/useRateLimit";
+
 export function ReviewForm() {
     const [rating, setRating] = useState(5);
     const [hoveredRating, setHoveredRating] = useState(0);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { isSubmitting, withRateLimit } = useRateLimit();
     const [isSuccess, setIsSuccess] = useState(false);
 
     async function handleSubmit(formData: FormData) {
-        setIsSubmitting(true);
-        formData.append("rating", rating.toString());
+        await withRateLimit(async () => {
+            formData.append("rating", rating.toString());
+            const result = await submitReview(formData);
 
-        const result = await submitReview(formData);
-        setIsSubmitting(false);
-
-        if (result.success) {
-            setIsSuccess(true);
-        } else {
-            toast.error(result.error);
-        }
+            if (result.success) {
+                setIsSuccess(true);
+            } else {
+                toast.error(result.error);
+            }
+        });
     }
 
     if (isSuccess) {

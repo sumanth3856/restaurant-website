@@ -75,7 +75,7 @@ export default function AdminLayout({
 
             {/* Sidebar */}
             <aside className={cn(
-                "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex flex-col",
+                "fixed inset-y-0 left-0 z-[60] w-64 bg-card border-r border-border transform transition-transform duration-300 ease-in-out md:sticky md:top-0 md:h-screen md:translate-x-0 flex flex-col",
                 isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <div className="p-6 border-b border-border hidden md:block">
@@ -83,7 +83,7 @@ export default function AdminLayout({
                 </div>
 
                 {/* Mobile Sidebar Header */}
-                <div className="p-6 border-b border-border md:hidden flex justify-between items-center bg-secondary/50">
+                <div className="p-6 border-b border-border md:hidden flex justify-between items-center bg-card">
                     <span className="text-xl font-serif font-bold text-primary">Menu</span>
                     <button onClick={() => setIsSidebarOpen(false)}>
                         <X className="w-5 h-5" />
@@ -107,10 +107,13 @@ export default function AdminLayout({
                                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                                 )}
                             >
-                                {/* Spinning Settings Icon on Hover or Active, others scale */}
+                                {/* Lively Icon Animation on Hover */}
                                 <Icon className={cn(
-                                    "w-5 h-5 transition-transform duration-500",
-                                    isSettings ? "group-hover:rotate-180" : "group-hover:scale-110",
+                                    "w-5 h-5 transition-all duration-500 ease-out",
+                                    // Settings spins, others have a lively bounce/rotate effect
+                                    isSettings
+                                        ? "group-hover:rotate-180"
+                                        : "group-hover:scale-110 group-hover:-rotate-12",
                                     (isSettings && isActive) && "animate-spin-slow"
                                 )} />
 
@@ -124,13 +127,13 @@ export default function AdminLayout({
                     })}
                 </nav>
 
-                <div className="p-4 border-t border-border">
+                <div className="p-4 border-t border-border mt-auto sticky bottom-0 bg-card z-10">
                     <button
                         onClick={handleSignOut}
                         disabled={isSigningOut}
-                        className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors group"
                     >
-                        <LogOut className="w-5 h-5" />
+                        <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                         Sign Out
                     </button>
                 </div>

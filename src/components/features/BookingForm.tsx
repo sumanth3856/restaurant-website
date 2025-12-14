@@ -25,8 +25,10 @@ const RequiredLabel = ({ label, icon: Icon, htmlFor }: { label: string, icon: an
     </div>
 );
 
+import { useRateLimit } from "@/hooks/useRateLimit";
+
 export function BookingForm() {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { isSubmitting, withRateLimit } = useRateLimit();
     const [isSuccess, setIsSuccess] = useState(false);
 
     const {
@@ -41,47 +43,45 @@ export function BookingForm() {
     });
 
     const onSubmit = async (data: BookingFormData) => {
-        setIsSubmitting(true);
+        await withRateLimit(async () => {
+            try {
+                const { error } = await supabase
+                    .from('bookings')
+                    .insert([
+                        {
+                            date: data.date,
+                            time: data.time,
+                            party_size: data.partySize,
+                            name: data.name,
+                            email: data.email,
+                            phone: data.phone,
+                            requests: data.requests,
+                            status: 'pending'
+                        }
+                    ]);
 
-        try {
-            const { error } = await supabase
-                .from('bookings')
-                .insert([
-                    {
-                        date: data.date,
-                        time: data.time,
-                        party_size: data.partySize,
-                        name: data.name,
-                        email: data.email,
-                        phone: data.phone,
-                        requests: data.requests,
-                        status: 'pending'
-                    }
-                ]);
+                if (error) throw error;
 
-            if (error) throw error;
+                // Send confirmation email
+                const emailResult = await sendBookingConfirmationEmail({
+                    name: data.name,
+                    email: data.email,
+                    date: data.date,
+                    time: data.time,
+                    guests: data.partySize,
+                });
 
-            // Send confirmation email
-            const emailResult = await sendBookingConfirmationEmail({
-                name: data.name,
-                email: data.email,
-                date: data.date,
-                time: data.time,
-                guests: data.partySize,
-            });
+                if (!emailResult.success) {
+                    logger.error("Email failed but booking succeeded:", emailResult.error);
+                    // Still show success to user since booking was created
+                }
 
-            if (!emailResult.success) {
-                logger.error("Email failed but booking succeeded:", emailResult.error);
-                // Still show success to user since booking was created
+                setIsSuccess(true);
+            } catch (err) {
+                logger.error("Booking error:", err);
+                toast.error("Failed to create booking. Please try again.");
             }
-
-            setIsSuccess(true);
-        } catch (err) {
-            logger.error("Booking error:", err);
-            toast.error("Failed to create booking. Please try again.");
-        } finally {
-            setIsSubmitting(false);
-        }
+        });
     };
 
     if (isSuccess) {

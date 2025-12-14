@@ -33,7 +33,7 @@ export default async function Home() {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 container mx-auto px-4 flex-grow flex flex-col justify-center items-center h-full pb-20 pt-32">
+        <div className="relative z-10 container mx-auto px-4 flex-grow flex flex-col justify-center items-center h-full pb-12 pt-32">
           <FadeIn className="max-w-5xl mx-auto text-center space-y-8 md:space-y-10" delay={0.2}>
 
             {/* Premium Eyebrow */}

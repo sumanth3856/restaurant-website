@@ -8,6 +8,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { deleteMenuItem } from "@/app/actions/menuActions";
 
+import { useRateLimit } from "@/hooks/useRateLimit";
+
 interface MenuActionsProps {
     id: string;
     imageUrl?: string;
@@ -16,22 +18,20 @@ interface MenuActionsProps {
 export function MenuActions({ id, imageUrl }: MenuActionsProps) {
     const supabase = createClient();
     const router = useRouter();
-    const [isDeleting, setIsDeleting] = useState(false);
+    const { isSubmitting: isDeleting, withRateLimit } = useRateLimit();
 
     const handleDelete = async () => {
         if (!confirm("Are you sure you want to delete this dish?")) return;
 
-        setIsDeleting(true);
-        try {
-            await deleteMenuItem(parseInt(id), imageUrl);
-            toast.success("Item deleted successfully");
-            // router.refresh() handled by revalidatePath, but useful for client-side feedback if needed immediately
-        } catch (error) {
-            console.error("Delete failed:", error);
-            toast.error("Failed to delete item.");
-        } finally {
-            setIsDeleting(false);
-        }
+        await withRateLimit(async () => {
+            try {
+                await deleteMenuItem(parseInt(id), imageUrl);
+                toast.success("Item deleted successfully");
+            } catch (error) {
+                console.error("Delete failed:", error);
+                toast.error("Failed to delete item.");
+            }
+        });
     };
 
     return (
