@@ -20,6 +20,7 @@ export function ReviewForm() {
             const result = await submitReview(formData);
 
             if (result.success) {
+                toast.success("Thank you for your review! It will be published after approval.");
                 setIsSuccess(true);
             } else {
                 toast.error(result.error);

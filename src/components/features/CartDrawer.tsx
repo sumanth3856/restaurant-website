@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 
 export function CartDrawer() {
@@ -36,6 +37,7 @@ export function CartDrawer() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
                         onClick={toggleCart}
                         className="fixed inset-0 bg-black/60 z-[999] backdrop-blur-[2px]"
                     />
@@ -45,7 +47,12 @@ export function CartDrawer() {
                         initial={{ x: "100%" }}
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
-                        transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                        transition={{
+                            type: "spring",
+                            damping: 35,
+                            stiffness: 400,
+                            mass: 0.8
+                        }}
                         className="fixed inset-y-0 right-0 z-[1000] w-full max-w-md bg-background shadow-2xl flex flex-col"
                     >
                         {/* Header */}
@@ -104,7 +111,10 @@ export function CartDrawer() {
                                                     {item.name}
                                                 </h3>
                                                 <button
-                                                    onClick={() => removeItem(item.id)}
+                                                    onClick={() => {
+                                                        removeItem(item.id);
+                                                        toast.success(`${item.name} removed from cart`);
+                                                    }}
                                                     className="text-muted-foreground/40 hover:text-red-500 transition-colors p-1"
                                                 >
                                                     <X className="w-4 h-4" />
@@ -114,14 +124,22 @@ export function CartDrawer() {
                                             <div className="flex justify-between items-end">
                                                 <div className="flex items-center gap-4">
                                                     <button
-                                                        onClick={() => updateQuantity(item.id, -1)}
+                                                        onClick={() => {
+                                                            updateQuantity(item.id, -1);
+                                                            if (item.quantity > 1) {
+                                                                toast.info(`${item.name} quantity decreased`);
+                                                            }
+                                                        }}
                                                         className="w-8 h-8 flex items-center justify-center rounded-full border border-border/50 hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
                                                     >
                                                         <Minus className="w-3 h-3" />
                                                     </button>
                                                     <span className="text-base font-bold w-4 text-center">{item.quantity}</span>
                                                     <button
-                                                        onClick={() => updateQuantity(item.id, 1)}
+                                                        onClick={() => {
+                                                            updateQuantity(item.id, 1);
+                                                            toast.info(`${item.name} quantity increased`);
+                                                        }}
                                                         className="w-8 h-8 flex items-center justify-center rounded-full border border-border/50 hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
                                                     >
                                                         <Plus className="w-3 h-3" />

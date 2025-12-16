@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LoginLoader } from "@/components/ui/LoginLoader";
+import { toast } from "sonner";
 
 import { useRateLimit } from "@/hooks/useRateLimit";
 
@@ -20,6 +21,11 @@ export default function LoginPage() {
         e.preventDefault();
         setError(""); // Clear previous errors
 
+        if (isLoading) {
+            toast.warning("Please wait before trying again.");
+            return;
+        }
+
         await withRateLimit(async () => {
             try {
                 const { error } = await supabase.auth.signInWithPassword({
@@ -30,14 +36,18 @@ export default function LoginPage() {
                 if (error) {
                     console.error("Login error:", error.message);
                     setError(error.message);
+                    toast.error(error.message);
                     return;
                 }
 
+                toast.success("Login successful! Redirecting...");
                 // Keep loading true while redirecting for smoother UX
                 router.push("/admin");
                 router.refresh();
             } catch {
-                setError("An unexpected error occurred.");
+                const errorMsg = "An unexpected error occurred.";
+                setError(errorMsg);
+                toast.error(errorMsg);
             }
         });
     };

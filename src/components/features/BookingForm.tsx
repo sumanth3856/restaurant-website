@@ -77,6 +77,7 @@ export function BookingForm() {
                     // Still show success to user since booking was created
                 }
 
+                toast.success("Booking confirmed! Check your email for details.");
                 setIsSuccess(true);
             } catch (err) {
                 logger.error("Booking error:", err);

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { updateBookingStatus } from "@/app/actions/bookingActions";
+import { toast } from "sonner";
 
 interface Booking {
     id: string;
@@ -36,6 +37,8 @@ export default function BookingsTable({ initialBookings }: BookingsTableProps) {
     const handleStatusUpdate = async (id: string, newStatus: Booking['status']) => {
         setLoadingId(id);
         setActionId(null);
+        const loadingToast = toast.loading(`Updating booking status...`);
+
         try {
             // Optimistic update
             setBookings(prev => prev.map(b =>
@@ -44,12 +47,13 @@ export default function BookingsTable({ initialBookings }: BookingsTableProps) {
 
             await updateBookingStatus(parseInt(id), newStatus);
 
+            toast.success(`Booking ${newStatus}!`, { id: loadingToast });
             // router.refresh() is handled by the server action's revalidatePath implicitly for other routes,
             // but we might still want it here to be safe or just rely on the setBookings for immediate feedback.
             router.refresh();
         } catch (error) {
             console.error('Error updating status:', error);
-            alert('Failed to update status');
+            toast.error('Failed to update booking status', { id: loadingToast });
             // Revert optimistic update (optional but good practice)
             router.refresh();
         } finally {

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { Loader2, Upload, X, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { upsertMenuItem } from "@/app/actions/menuActions";
+import { toast } from "sonner";
 
 // Schema
 const menuSchema = z.object({
@@ -65,6 +66,7 @@ export default function MenuForm({ initialData }: MenuFormProps) {
         if (file) {
             setImageFile(file);
             setPreviewUrl(URL.createObjectURL(file));
+            toast.success("Image selected successfully");
         }
     };
 
@@ -85,11 +87,14 @@ export default function MenuForm({ initialData }: MenuFormProps) {
 
     const onSubmit = async (data: MenuFormValues) => {
         await withRateLimit(async () => {
+            const loadingToast = toast.loading(imageFile ? "Uploading image..." : "Saving menu item...");
+
             try {
                 let imageUrl = data.image;
 
                 if (imageFile) {
                     imageUrl = await uploadImage(imageFile);
+                    toast.loading("Image uploaded! Saving menu item...", { id: loadingToast });
                 }
 
                 const payload = {
@@ -99,11 +104,18 @@ export default function MenuForm({ initialData }: MenuFormProps) {
 
                 await upsertMenuItem(payload, initialData?.id);
 
+                toast.success(
+                    initialData?.id
+                        ? "Menu item updated successfully!"
+                        : "Menu item created successfully!",
+                    { id: loadingToast }
+                );
+
                 router.push("/admin/menu");
                 router.refresh();
             } catch (error) {
                 console.error("Error saving menu item:", error);
-                alert("Failed to save menu item. See console for details.");
+                toast.error("Failed to save menu item. Please try again.", { id: loadingToast });
             }
         });
     };

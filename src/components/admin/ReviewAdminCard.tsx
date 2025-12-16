@@ -4,6 +4,7 @@ import { Check, X, Trash2, Loader2, Clock } from "lucide-react";
 import { updateReviewStatus, deleteReview } from "@/app/actions/reviews";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Review {
     id: number;
@@ -23,15 +24,31 @@ export function ReviewAdminCard({ review }: ReviewCardProps) {
 
     async function handleStatus(status: 'approved' | 'rejected') {
         setLoading(true);
-        await updateReviewStatus(review.id, status);
-        setLoading(false);
+        const loadingToast = toast.loading(`${status === 'approved' ? 'Approving' : 'Rejecting'} review...`);
+
+        try {
+            await updateReviewStatus(review.id, status);
+            toast.success(`Review ${status}!`, { id: loadingToast });
+        } catch (error) {
+            toast.error(`Failed to ${status} review`, { id: loadingToast });
+        } finally {
+            setLoading(false);
+        }
     }
 
     async function handleDelete() {
         if (!confirm("Are you sure you want to delete this review?")) return;
         setLoading(true);
-        await deleteReview(review.id);
-        setLoading(false);
+        const loadingToast = toast.loading("Deleting review...");
+
+        try {
+            await deleteReview(review.id);
+            toast.success("Review deleted successfully!", { id: loadingToast });
+        } catch (error) {
+            toast.error("Failed to delete review", { id: loadingToast });
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
